@@ -34,6 +34,7 @@ public class DiscountEditorController extends HttpServlet {
 		action = (action == null) ? "" : action; // Pour le switch qui n'aime pas les null
 		String code = request.getParameter("code");
 		String taux = request.getParameter("taux");
+                
 		try {
 			DAO dao = new DAO(DataSourceFactory.getDataSource());
 			request.setAttribute("codes", dao.allCodes());			
@@ -52,6 +53,11 @@ public class DiscountEditorController extends HttpServlet {
 						request.setAttribute("message", "Impossible de supprimer " + code + ", ce code est utilisé.");
 					}
 					break;
+                                case "UPDATE":
+                                        dao.update(code,Float.valueOf(taux));
+                                        request.setAttribute("message", "Mise à jour " + code + " réussi");   
+                                        request.setAttribute("codes", dao.allCodes());
+                                        break;
 			}
 		} catch (Exception ex) {
 			Logger.getLogger("discountEditor").log(Level.SEVERE, "Action en erreur", ex);
